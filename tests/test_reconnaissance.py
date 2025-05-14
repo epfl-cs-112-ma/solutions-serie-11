@@ -1,0 +1,35 @@
+import re
+
+def test_reconnaissance() -> None:
+    print("")
+    def test(regex: str, s: str) -> bool:
+        print(f"| {'`'+regex+'`':16} | {'`'+s+'`':9} |")
+        return re.compile(regex).fullmatch(s) is not None
+
+    assert test("arbre", "arbre")
+    assert not test("arbre", "arbres")
+    assert test("a[br]+e", "arbre")
+    assert test("a[br]+e", "are")
+    assert not test("a[br]+e", "ae")
+    assert test("a[br]*e", "ae")
+    assert test("[aeiouy]", "u")
+    assert not test("[aeiouy]", "b")
+    assert test("[aeiouy]+", "oui")
+    assert not test("[aeiouy]+", "non")
+    assert test("ab|cd", "cd")
+    assert not test("ab|cd", "abd")
+    assert test("a(b|c)d", "abd")
+    assert not test("ab|cd?", "abc")
+    assert test("ab|cd?", "c")
+    assert test("ab|cd?", "ab")
+    assert not test("ab|cd?", "")
+    assert test("(ab|cd)?", "")
+    assert test("bonjour|soir", "bonjour")
+    assert not test("bonjour|soir", "bonsoir")
+    assert test("bon(jour|soir)", "bonjour")
+    assert test("bon(jour|soir)", "bonsoir")
+    assert not test("bon(jour|soir)", "bon")
+    assert not test(r"x|y", "x|y")
+    assert test(r"x\|y", "x|y")
+    assert test("a[f-m]+z", "aghlfz")
+    assert not test("a[f-m]+z", "aghzfz")
